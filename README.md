@@ -158,7 +158,11 @@ Put `wildfly:deploy` as Goal.
 
 ### Task 1.
 Inside the **domain project**, create a set of JPA entities given the ER model
-you can find in the ER.png file.
+you can find in the ER.png file. You will need also to create the java source
+folder.
+
+    mkdir -p domain/src/main/java
+
 ![Entity-Relationship diagram](ER.png)
 
 Use this package for your entities: `es.uvigo.esei.dgss.exercises.domain`
@@ -168,6 +172,11 @@ Inside the **Web project**, create a Facade class containing one method
 per each query in the following list.
 
 Use this package: `es.uvigo.esei.dgss.exercises.web`
+
+You will also need to create the source folders in this project:
+
+    mkdir -p web/src/main/java
+    mkdir -p web/src/main/webapp
 
 1. Create a new user given its login, name, password and picture
 2. Create a friendship between two given users
