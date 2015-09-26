@@ -6,15 +6,11 @@
 		<artifactId>exercises</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>web</artifactId>
-	<packaging>war</packaging>
+	<artifactId>service</artifactId>
+	<packaging>jar</packaging>
 
-	<name>Web</name>
-	<description>DGSS Exercises - Web</description>
-
-	<properties>
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-	</properties>
+	<name>Service</name>
+	<description>DGSS Exercises - Service</description>
 
 	<dependencies>
 		<!-- General -->
@@ -23,9 +19,9 @@
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-                <dependency>
+		<dependency>
                         <groupId>es.uvigo.esei.dgss</groupId>
-                        <artifactId>service</artifactId>
+                        <artifactId>domain</artifactId>
                 </dependency>
 
 		<!-- Testing -->
@@ -39,19 +35,5 @@
 			<artifactId>java-hamcrest</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-persistence-dbunit</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>
