@@ -169,7 +169,7 @@ Use this package for your entities: `es.uvigo.esei.dgss.exercises.domain`
 
 ### Task 2.
 Inside the **Web project**, create a Facade class containing one method 
-per each query in the following list.
+per each query (use JPA QL) in the following list.
 
 Use this package: `es.uvigo.esei.dgss.exercises.web`
 
@@ -306,7 +306,44 @@ Now, you can surf to
 to run the Servlet.
 
 ## Exercise 2: EJB
-Coming soon...
+In this exercise, we will create a simple EJB layer. We will use the 
+**Service project** for this purpose.
+
+Use the package `es.uvigo.esei.dgss.exercise.service`.
+
+### Task 1.
+Create two EJB for general management of the social network.
+
+- UserEJB, for retrieving, creating updating and removing users, as well as to
+create friendships between them and to like posts.
+- PostEJB, for retrieving, creating updating and retrieving posts, as well as to
+add comments to them.
+
+In order to test your EJBs, you can re-use your `SimpleServlet`. Inject your
+EJBs inside the Servlet with the `@EJB` annotation.
+
+### Task 2.
+Create a StatisticsEJB, allowing you to retrieve the number of users and posts
+in the social network. It should be very efficient (do not access to the DB everytime
+it is queried) and shared for all users of the system (think in Singleton). That
+is:
+
+- Create a singleton EJB, which ONLY when it is started accesses the
+database and counts users and posts to a private variable.
+- When a user or a post is added, removed, you should call a singleton method
+to notify this. The singleton updates its internal count.
+- Give getter methods for the user and post counts.
+
+Note: Take into account concurrency issues!
+
+### Task 3.
+Add an EmailService EJB. This EJB allow you to send an email to a given User:
+`sendEmail(User u, String subject, String body)`. 
+
+- This service should send emails asynchronously.
+- In order to use this EJB, send an email to the post's author everytime a user
+likes his post.
+- Implement this service [using Java Mail inside Wildfly](http://khozzy.blogspot.com.es/2013/10/how-to-send-mails-from-jboss-wildfly.html).
 
 ## Exercise 3: JAX-RS
 Coming soon...
