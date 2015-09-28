@@ -102,6 +102,10 @@ Check if WildFly is running by browsing to [http://localhost:8080](http://localh
 
     git remote set-url origin http://sing.ei.uvigo.es/dt/gitlab/bob/bob-esi-solutions.git
 
+### Add the original repository (esi-exercises) as a remote in order to retrieve updates
+
+    git remote add exercises http://sing.ei.uvigo.es/dt/gitlab/dgss/esi-exercises.git
+    
 ### Start coding your solution
 Create a branch for your solution:
 
@@ -133,6 +137,33 @@ subproject in order to see something)
     # the rest of the times
     git push
 
+### Get updates from the exercises remote
+When the exercise details are updated or fixed, they will be available as new
+commits in the `exercises/master` branch. In order to get its updates and to
+merge them with our solution branch, we have to run (please note: remember to
+add the `exercises` remote as we did few steps ago).
+
+**Note:** You should commit your work in progress before doing this.
+    
+    # update all remote branches to see changes to pull
+    git fetch --all
+    
+    # change to branch master
+    git checkout master
+    
+    # get changes from the exercises/master
+    git pull exercises master
+    
+    # return to the branch solution
+    git checkout solution
+        
+    # merge your solution branch with the changes from master.  If there is a 
+    # conflict, both you and the teacher have made changes in the same files.
+    # You have to resolve the conflict
+    git merge master
+    
+That's all. You can now continue developing your changes in your solution branch.
+    
 ### Eclipse
 You can use any other IDE, such as IntelliJ IDEA or NetBeans, as long as they 
 are compatible with Maven projects.
