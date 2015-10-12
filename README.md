@@ -5,21 +5,21 @@ inside the DGSS itinerary.
 
 ## Deployment Environment
 
-The environment is based on Maven 3, MySQL 5.5, WildFly 8.2.1 and Eclipse Mars 
+The environment is based on Maven 3, MySQL 5.5, WildFly 8.2.1 and Eclipse Mars
 for JEE.
 
 ### Java JDK 8
-Download and install Java JDK 8, preferably the Oracle version (the commands 
+Download and install Java JDK 8, preferably the Oracle version (the commands
 `java` and `javac` must be available).
 
 ### Maven
-Install Maven 3 in your system, if it was not installed (the `mvn` command must 
+Install Maven 3 in your system, if it was not installed (the `mvn` command must
 be available)
 
 ### Git
-First, install git in your system if it was not installed (the `git` command 
-must be available). We will work with Git to get updates of these exercises, 
-as well as to deliver the student solution. Concretely, we will work with 2 Git 
+First, install git in your system if it was not installed (the `git` command
+must be available). We will work with Git to get updates of these exercises,
+as well as to deliver the student solution. Concretely, we will work with 2 Git
 repositories inside the [our Gitlab server](http://sing.ei.uvigo.es/dt/gitlab)
 
 1. The main repository (read-only for students)
@@ -27,8 +27,8 @@ repositories inside the [our Gitlab server](http://sing.ei.uvigo.es/dt/gitlab)
     Git url: `http://sing.ei.uvigo.es/dt/gitlab/dgss/esi-exercises.git`
 
 2. The student's solution repository. Surf to
-[our Gitlab server](http://sing.ei.uvigo.es/dt/gitlab) and create a user with 
-your @esei.ei.uvigo.es email account. If your username is `bob`, create 
+[our Gitlab server](http://sing.ei.uvigo.es/dt/gitlab) and create a user with
+your @esei.ei.uvigo.es email account. If your username is `bob`, create
 a **PRIVATE** project `bob-esi-solutions`
 
     Git url: `http://sing.ei.uvigo.es/dt/gitlab/bob/bob-esi-solutions.git`
@@ -39,21 +39,21 @@ Download and install MySQL 5.5 locally.
 Connect to the MySQL client console as root.
 
     mysql -u root -p
-    
+
 Inside the MySQL console, create the database `dgss`
-    
+
     create database dgss;
 
 Create the MySQL user `dgssuser` with password `dgsspass` and grant him all
 privileges on the `dgss` database
 
     grant all privileges on dgss.* to dgssuser@localhost identified by "dgsspass";
-    
+
 Exit the MySQL console
     exit
-    
+
 ### WildFly
-Download 
+Download
 [WildFly 8.2.1.Final](http://download.jboss.org/wildfly/8.2.1.Final/wildfly-8.2.1.Final.zip)
 
 Uncompress the downloaded zip in any folder on your computer.
@@ -62,7 +62,7 @@ Uncompress the downloaded zip in any folder on your computer.
 Download [mysql driver 5.1.21](http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar)
 and copy it inside the `standalone/deployments` folder of widlfly
 
-Create the mysql-ds.xml file with the following content and place it inside 
+Create the mysql-ds.xml file with the following content and place it inside
 the `standalone/deployments` folder of widlfly
 
 ```xml
@@ -71,7 +71,7 @@ the `standalone/deployments` folder of widlfly
   xsi:schemaLocation="http://www.ironjacamar.org/doc/schema http://www.ironjacamar.org/doc/schema/datasources_1_1.xsd">
 
   <datasource jndi-name="datasource/dgss" pool-name="MySQLPool">
-  
+
       <connection-url>jdbc:mysql://localhost:3306/dgss</connection-url>
       <driver>mysql-connector-java-5.1.21.jar</driver>
       <pool>
@@ -91,7 +91,7 @@ Run the following command
     /path/to/wildfly/bin/standalone.sh
 
 Check if WildFly is running by browsing to [http://localhost:8080](http://localhost:8080)
-    
+
 ## Developing Environment
 ### Clone the remote repository  
     git clone http://sing.ei.uvigo.es/dt/gitlab/dgss/esi-exercises.git
@@ -105,12 +105,12 @@ Check if WildFly is running by browsing to [http://localhost:8080](http://localh
 ### Add the original repository (esi-exercises) as a remote in order to retrieve updates
 
     git remote add exercises http://sing.ei.uvigo.es/dt/gitlab/dgss/esi-exercises.git
-    
+
 ### Start coding your solution
 Create a branch for your solution:
 
     git checkout -b solution
-    
+
 ### Building and running the project (every time you make changes in your code)
 With the WildFly server up and running, you have to go inside your source code folder
 
@@ -128,12 +128,12 @@ subproject in order to see something)
     git add .
     # or
     git add <concrete_files>
-    
+
     git commit
 
 ### Pushing your changes to your remote repository
     # the first time after creating the branch solution
-    git push -u origin solution 
+    git push -u origin solution
     # the rest of the times
     git push
 
@@ -144,36 +144,36 @@ merge them with our solution branch, we have to run (please note: remember to
 add the `exercises` remote as we did few steps ago).
 
 **Note:** You should commit your work in progress before doing this.
-    
+
     # update all remote branches to see changes to pull
     git fetch --all
-    
+
     # change to branch master
     git checkout master
-    
+
     # get changes from the exercises/master
     git pull exercises master
-    
+
     # return to the branch solution
     git checkout solution
-        
-    # merge your solution branch with the changes from master.  If there is a 
+
+    # merge your solution branch with the changes from master.  If there is a
     # conflict, both you and the teacher have made changes in the same files.
     # You have to resolve the conflict
     git merge master
-    
+
 That's all. You can now continue developing your changes in your solution branch.
-    
+
 ### Eclipse
-You can use any other IDE, such as IntelliJ IDEA or NetBeans, as long as they 
+You can use any other IDE, such as IntelliJ IDEA or NetBeans, as long as they
 are compatible with Maven projects.
 
-Before continue, you have **to patch Eclipse Mars**, concretely the m2e-wtp 
-plugin. Go to `Help -> Install New Software`. Work with repository located 
-at `http://download.eclipse.org/m2e-wtp/snapshots/mars/` and then select and 
+Before continue, you have **to patch Eclipse Mars**, concretely the m2e-wtp
+plugin. Go to `Help -> Install New Software`. Work with repository located
+at `http://download.eclipse.org/m2e-wtp/snapshots/mars/` and then select and
 install "Maven Integration for WTP". Restart Eclipse.
 
-Open Eclipse Mars JEE and import your Maven project with 
+Open Eclipse Mars JEE and import your Maven project with
 `File -> Import -> Maven -> Existing Maven Projects`
 
 Select your source code folder (where the `pom.xml` should be placed)
@@ -182,7 +182,7 @@ Eclipse should then import 3 projects (`esi-exercise`, `web` and `domain`)
 
 You can run, if you want the project by:
 1. Right click on `esi-exercise` project and `Run As -> Maven install`
-2. Right click on `web` project and `Run As -> Maven build...`. 
+2. Right click on `web` project and `Run As -> Maven build...`.
 Put `wildfly:deploy` as Goal.
 
 ## Exercise 1: JPA
@@ -199,7 +199,7 @@ folder.
 Use this package for your entities: `es.uvigo.esei.dgss.exercises.domain`
 
 ### Task 2.
-Inside the **Web project**, create a Facade class containing one method 
+Inside the **Web project**, create a Facade class containing one method
 per each query (use JPA QL) in the following list.
 
 Use this package: `es.uvigo.esei.dgss.exercises.web`
@@ -213,11 +213,11 @@ You will also need to create the source folders in this project:
 2. Create a friendship between two given users
 3. Get all friends of a given user
 4. Get all posts of the friends of a given user
-5. Get the posts that have been commented by the friends of a given user after 
+5. Get the posts that have been commented by the friends of a given user after
 a given date
 6. Get the users which are friends of a given user who like a given post
 7. Give me all the pictures a given user likes
-8. Create a list of potential friends for a given user (feel free to create 
+8. Create a list of potential friends for a given user (feel free to create
 you own "algorithm")
 
 ### Sample files
@@ -236,27 +236,27 @@ import es.uvigo.esei.dgss.exercises.domain.User;
 public class Facade {
 
 	private EntityManager em;
-	
+
 	@PersistenceContext
 	public void setEntityManager(EntityManager em) {
 		this.em = em;
 	}
-	
+
 	public User addUser(String login, String name, String password, byte[] picture) {
 		User user = new User(login);
-		
+
 		user.setName(name);
 		user.setPassword(password);
 		user.setPicture(picture);
-		
+
 		em.persist(user);
-		
+
 		return user;
 	}
 }
 ```
 
-In order to test the facade, an easy solution would be to create a 
+In order to test the facade, an easy solution would be to create a
 "Simple Servlet" as this one:
 
 ```java
@@ -287,30 +287,37 @@ public class SimpleServlet extends HttpServlet {
 
 	@Inject
 	private Facade facade;
-	
+
 	@Resource
 	private UserTransaction transaction;
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+
 		PrintWriter writer = resp.getWriter();
-		
+
 		writer.println("<html>");
 		writer.println("<body>");
 		writer.println("<h1>Facade tests</h1>");
-		
+
 		// work with Facade
-		
+
 		try {
 			transaction.begin();
-			
-			User u = facade.addUser(UUID.randomUUID().toString(), "name", "password", new byte[]{});	
+
+			User u = facade.addUser(UUID.randomUUID().toString(), "name", "password", new byte[]{});
 			writer.println("User "+u.getLogin()+" created successfully");
-			
+
 			transaction.commit();
-			
-		} catch (NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+
+		} catch (
+    NotSupportedException |
+    SystemException |
+    SecurityException |
+    IllegalStateException |
+    RollbackException |
+    HeuristicMixedException |
+    HeuristicRollbackException e) {
 			try {
 				transaction.rollback();
 			} catch (IllegalStateException e1) {
@@ -324,20 +331,20 @@ public class SimpleServlet extends HttpServlet {
 				e1.printStackTrace();
 			}
 		}
-		
+
 		writer.println("</body>");
 		writer.println("</html>");
-		
+
 	}
 }
 ```
 
-Now, you can surf to 
+Now, you can surf to
 [http://localhost:8080/web-0.0.1-SNAPSHOT/SimpleServlet](http://localhost:8080/web-0.0.1-SNAPSHOT/SimpleServlet)
 to run the Servlet.
 
 ## Exercise 2: EJB
-In this exercise, we will create a simple EJB layer. We will use the 
+In this exercise, we will create a simple EJB layer. We will use the
 **Service project** for this purpose.
 
 Use the package `es.uvigo.esei.dgss.exercise.service`.
@@ -369,22 +376,220 @@ Note: Take into account concurrency issues!
 
 ### Task 3.
 Add an EmailService EJB. This EJB allow you to send an email to a given User:
-`sendEmail(User u, String subject, String body)`. 
+`sendEmail(User u, String subject, String body)`.
 
 - This service should send emails asynchronously.
 - In order to use this EJB, send an email to the post's author everytime a user
 likes his post.
 - Implement this service [using Java Mail inside Wildfly](http://khozzy.blogspot.com.es/2013/10/how-to-send-mails-from-jboss-wildfly.html).
 
+
+## Java EE Security
+Before continue, it is time to start adding security capabilities to our application.
+We should configure Wildfly to do this. (Code based on [this post](http://gadgetsytecnologia.com/bab8590ce806f7f7f/cannot-get-password-custom-loginmodule.html))
+
+### Configure the security domain in Wildfly
+Edit the `standalone/configuration/standalone.xml` file and:
+
+- Inside `<security-realms>`, create this new realm:
+
+```xml
+    <security-realm name="RemotingRealm">
+        <authentication>
+            <jaas name="AppRealmLoopThrough"/>
+        </authentication>
+    </security-realm>
+```
+
+- Inside `<security-domains>`, create the following domain:
+
+```xml
+    <security-domain name="AppRealmLoopThrough" cache-type="default">
+        <authentication>
+            <login-module code="Client" flag="required">
+                <module-option name="multi-threaded" value="true"/>
+            </login-module>
+        </authentication>
+    </security-domain>
+```
+
+- Change the `<http-connector>` configuration to use the new security-realm
+```
+    <http-connector name="http-remoting-connector" connector-ref="default" security-realm="RemotingRealm"/>
+```
+
+- The previous steps are application independent, and thus should be done once.
+Finally, again inside `<security-domain>`, place the security domain for the application:
+
+```xml
+    <security-domain name="dgss-security-domain">
+        <authentication>
+            <login-module code="Database" flag="required">
+                <module-option name="dsJndiName" value="datasource/dgss"/>
+                <module-option name="principalsQuery" value="SELECT password FROM User WHERE login=?"/>
+                <module-option name="rolesQuery" value="SELECT role,'Roles' FROM User WHERE login=?"/>
+            </login-module>
+        </authentication>
+    </security-domain>
+```
+**Note:** Keep attention to the `principalsQuery` and the `rolesQuery` in order
+to adapt them to your application database structure.
+
+### Configure the entire application's security domain when accessing protected resources (web and EJBs)
+
+Add the file `jboss-web.xml` inside your `/src/main/webapp/WEB-INF` directory in the
+**Web project**.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+     <security-domain>dgss-security-domain</security-domain>
+</jboss-web>
+```
+
+### Using security
+Now you are able to use the declarative security via annotations in your EJBs,
+such as `@RolesAllowed`, `@DeclareRoles`, etc. In addition, you can do
+programmatic security by injecting the `SessionContext` in your EJB in order to
+implement security business logic. For example:
+
+```java
+@Stateless
+public class PostEJB {
+
+	//...
+  @Resource
+  private SessionContext ctx; // a object who gives access to the logged user
+
+  //...
+  public void anyMethod() {
+    //getting the user login
+    String login = ctx.getCallerPrincipal().getName(); // accessing the logged user
+
+    // check a role...
+    if (!ctx.isCallerInRole("admin")) {
+      throw new SecurityException("you are not admin!!");
+    }
+  }
+```
+
 ## Exercise 3: JAX-RS
-Coming soon...
+
+### Starting with JAX-RS
+We will work with the URLs starting with `/api` to deploy the rest components.
+
+Create the file `/src/main/webapp/WEB-INF/web.xml` in order to enable REST.
+
+```xml
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+	 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/private/api/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+</web-app>
+```
+
+### Security in REST
+We will implement a simple security mechanism: use basic HTTP authentication in
+those resources which need to know a 'logged' user. The resources you want to
+protect will depend on the design of your REST API. The server will authenticate
+these requests using the login module configured in wildfly previously.
+
+For example, if we have these resources:
+- `/api/user` (registration and get user details)
+- `/api/user/post` (logged user's and his friend's posts)
+- `/api/user/post/<id>/like` (logged user's (or his friend's) posts likes)
+- `/api/user/friend` (logged user's friends)
+- ...
+
+We could do the following security scheme:
+
+- All requests to `/api/user/*` will be protected.
+- Requests to `/api/user` will be also protected, except for the method POST,
+which will be the *registration* point.
+- We will exclude the OPTIONS HTTP method from protection, because we will enable
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) (see later).
+
+Here you have an example for the `web.xml` file in order to protect your API behind
+HTTP basic authentication, following the aforementioned scheme.
+
+```xml
+<security-role>
+		<role-name>admin</role-name>
+	</security-role>
+	<security-role>
+		<role-name>user</role-name>
+	</security-role>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>socialnet_api</web-resource-name>
+			<url-pattern>/api/user/*</url-pattern>
+			<http-method-omission>OPTIONS</http-method-omission>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+			<role-name>user</role-name>
+		</auth-constraint>		
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>user_resource</web-resource-name>
+			<url-pattern>/api/user</url-pattern>
+			<http-method-omission>OPTIONS</http-method-omission>
+			<http-method-omission>POST</http-method-omission>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+			<role-name>user</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>default</realm-name>
+	</login-config>
+```
+
+### Task 1.
+Design your Rest API. Think in *resources* (user, user posts, user friends, etc) and
+*operations* in terms of HTTP methods (Creating=POST, Reading=GET, updating=PUT, deleting=DELETE).
+
+### Task 2.
+Implement your API Rest. Implement the API Rest with JAX-RS.
+
+- Use the package `es.uvigo.esei.dgss.exercises.rest` in the **Web project**.
+- Use the EJBs (`UserEJB` and `PostEJB`) previously implemented.
+- Implement a different class for each resource.
+- Implement security business logic in the EJBs, not in the REST. Try to Keep
+the REST API as simple as possible. Remember that the main responsibility of the
+REST API is to capture HTTP requests, delegate immediately in the business layer
+(i.e. EJBs) and build the HTTP response.
+- Use `Response` as the return type of your REST methods.
+- For testing your API, you can use a browser plugin such as [RestClient](https://addons.mozilla.org/es/firefox/addon/restclient/)
+for Firefox, or [DHC](https://chrome.google.com/webstore/detail/dhc-resthttp-api-client/aejoelaoggembcahagimdiliamlcdmfm) for Chrome,
+or you can use a command line utility such as `curl`. For example:
+
+```bash
+# do a POST with JSON data with curl
+curl -i  --data '{"login":"pepe", "name": "Pepito Pérez", "password":"pepe"}' --header "Content-Type: application/json"  http://localhost:8080/web-0.0.1-SNAPSHOT/api/user
+
+# do a GET (with authentication)
+curl -i  -u dgpena:dgpena http://localhost:8080/web-0.0.1-SNAPSHOT/api/user
+
+# do a PUT request (with authentication and without data)
+curl -X PUT -i -u pepe:pepe http://localhost:8080/web-0.0.1-SNAPSHOT/api/user/friend/incoming/dgpena
+```
+
 
 ## Exercise 4: AngularJS
 Coming soon...
 
 ## Exercise 5: JSF
 Coming soon...
-
-
-
-  
