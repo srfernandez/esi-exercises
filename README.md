@@ -589,6 +589,38 @@ curl -X PUT -i -u pepe:pepe http://localhost:8080/web-0.0.1-SNAPSHOT/api/user/fr
 
 
 ## Exercise 4: AngularJS
+Before continuing, we will enable CORS in our server application, in order to allow
+AJAX requests from pages outside the server. This will allow us to test our Angular
+application locally, so we have no need to redeploy the server when we change the
+angular application files. So, in order to do that, we only have to create a 
+`ContainerResponseFilter` in our **Web Project** in our `es.uvigo.esei.dgss.exercises.rest`
+package.
+
+```java
+package es.uvigo.esei.dgss.exercises.rest;
+
+import java.io.IOException;
+
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
+
+@Provider
+public class CORSFilter implements ContainerResponseFilter {
+
+   @Override
+   public void filter(final ContainerRequestContext requestContext,
+                      final ContainerResponseContext cres) throws IOException {
+      cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+      cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
+      cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+      cres.getHeaders().add("Access-Control-Max-Age", "1209600");
+   }
+
+}
+```
 Coming soon...
 
 ## Exercise 5: JSF
