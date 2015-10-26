@@ -588,7 +588,12 @@ curl -X PUT -i -u pepe:pepe http://localhost:8080/web-0.0.1-SNAPSHOT/api/user/fr
 ```
 
 
-## Exercise 4: AngularJS
+## Exercise 4: AngularJS (Optional)
+
+**This exercise is optional. By doing it, your grading could be increased above the 100%**
+
+We will desing a client application of our REST API via [AngularJS](https://angularjs.org/).
+
 Before continuing, we will enable CORS in our server application, in order to allow
 AJAX requests from pages outside the server. This will allow us to test our Angular
 application locally, so we have no need to redeploy the server when we change the
@@ -621,7 +626,203 @@ public class CORSFilter implements ContainerResponseFilter {
 
 }
 ```
-Coming soon...
+
+### Starting with angular
+
+Place your files inside your **Web project** in `src/main/webapp/angular`.
+
+The app will be a 'single-page' app, but by using [ngRoute](https://docs.angularjs.org/api/ngRoute)
+in order to simulate a 'multi-page', back button compatible site.
+
+We will start with the `main.html` file, called `index.html`. Here is an example:
+
+```html
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+  		
+  		<!-- app scripts -->
+  		<script src="scripts/app.js"></script>
+  		<script src="scripts/controller/homecontroller.js"></script>
+  		<script src="scripts/controller/otherpagecontroller.js"></script>
+  		<script src="scripts/service/userservice.js"></script>
+	</head>
+	
+	<body ng-app="socialnetApp">
+		<div><a ng-href="#/">homepage</a> | <a ng-href="#/otherpage">otherpage</a></div>
+		<hr>
+	    <div class="row" ng-view="">HERE IS THE VIEW (you should not see this!)</div>
+	    <hr>
+	    <div>FOOTER</div>
+	</body>
+
+</html>
+```
+
+You can see the scripts section in the `header` section of `index.html`. 
+
+- The `scripts/app.js` contain the application initialization and routes (multi-page) 
+definitions.
+- The `controller/*.js` contain your controllers code. Controllers gives data and
+react to events to and from the view pages. View pages will be placed in `views` folder
+- The `service/*.js` define services, which are reusable objects you can use 
+across your controllers or other services.
+
+Lets start with `scripts/app.js`
+
+```javascript
+// create the angularjs application
+
+var app = angular.module('socialnetApp', ['ngRoute']);
+
+app.config(['$routeProvider', function($routeProvider) {
+	
+	$routeProvider
+	.when('/',{
+		templateUrl: 'views/home.html',
+		controller: 'HomeController'
+	})
+	.when('/otherpage',{
+		templateUrl: 'views/otherpage.html',
+		controller: 'OtherPageController'
+	})
+	.otherwise({
+		redirectTo: '/'
+	});
+}]);
+```
+
+Here, we define two routes, with the associated view html page and the corresponding
+controller.
+
+Lets see the code of the `HomeController` (defined in 
+`scripts/controller/homecontroller.js`).
+
+```javascript
+// retrieve the current app
+var app = angular.module('socialnetApp');
+
+// add a new controller
+app.controller('HomeController', ['userService', '$scope', function(userService, $scope){
+	
+	
+	$scope.users = [];
+	
+	userService.getUsers(function(users){
+		$scope.users = users;
+	},
+	function(response){
+		alert("error retrieving users")
+	});
+	
+	
+}]);
+```
+
+Here, you can see, the controller defines a 'scope' variable (`users`) which
+will be iterated in the view (`views/home.html`).
+
+In order to obtain the $scope.user array, we will call a service defined by us:
+the `userService` service. This service defines the `getUsers(onSuccess_callback,
+onError_callback)` function, where users can be retrieved.
+
+Lets see this service (`scripts/service/userservice.js`):
+
+```javascript
+angular.module('socialnetApp')
+.factory('userService', ['$http', function($http){
+	
+	return {
+		getUsers: function(onSuccess, onFail) {
+			//configure http auth 
+			$http.defaults.headers.common.Authorization =
+			    'Basic '+btoa('dgpena:dgpena');
+			
+			$http.get('http://localhost:8080/web-0.0.1-SNAPSHOT/api/user')
+			.success(onSuccess)
+			.error(onFail);
+		}
+	}
+}]);
+```
+
+The service, uses the `$http` angular object, which allow us to generte HTTP
+requests to the backend and obtain the results via callback functions defined by
+us. Here we define the `getUsers` function receiving this two callbacks that will
+be passed to the $http.get function as well. When the results arrive, they will be
+passed by invoking the `onSuccess(data)` callback, which were defined in the 
+controlled previously defined.
+
+In addition, here we see how to authenticate our requests by adding the HTTP basic 
+auth header for a specific username/password.
+
+Finally, we can see the view to show the users (`/views/home.html`):
+
+```html
+WELCOME TO THE HOME<br>
+
+<h1>Users</h1>
+<div ng-repeat="user in users">
+	login: {{user.login}}
+</div>
+
+```
+Here you can see the iteration via the `ng-repeat` attribute, which will repeat
+the `div` element per each user. Inside the element, we display the user login,
+by using the special `{{ expression }}` angular expression delimiters.
+
+Finally, lets see another route, the `views/anotherpage.html` with its controller
+`scripts/controller/anotherpagecontroller.js`.
+
+```html
+The $scope.value is: {{value}}<br>
+The count is: {{count}}<br>
+<button ng-click="increaseCount()">click me</button>
+<hr>
+Type here your name: <input type="text" ng-model="yourname" />
+<hr>
+<span ng-show="yourname.length>0">Hi {{yourname}}</span>
+
+```
+
+```javascript
+// retrieve the current app
+var app = angular.module('socialnetApp');
+
+// add a new controller
+app.controller('OtherPageController', ['$scope', function($scope){
+	// controller implementation
+	
+	$scope.value = 'a scope value';
+	$scope.count = 0;
+	
+	$scope.increaseCount = function() {
+		$scope.count = $scope.count + 1;
+	}
+}]);
+```
+
+In this example, you can see:
+- How binding works (by binding `$scope.yourname` to a input box and displaying
+it at the same time inside a `span` element, which will only be shown if the
+`$scope.yourname` variable contains some text.
+- Attend to a click in a button in order to increase the `$scope.count` variable.
+
+### Task 1
+
+Implement the following functionalities in Angular:
+
+- Register new user (optional with avatar) (10%).
+- Login (10%). This can be accomplished by calling the backend to any authenticated
+function and, if it does not return 401, you can assume that the user credentials are ok.
+- Get user's wall (30%)
+- Post a simple text post (30%)
+- Add like to post (20%)
+
 
 ## Exercise 5: JSF
 Coming soon...
