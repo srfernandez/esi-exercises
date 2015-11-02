@@ -562,7 +562,22 @@ Design your Rest API. Think in *resources* (user, user posts, user friends, etc)
 *operations* in terms of HTTP methods (Creating=POST, Reading=GET, updating=PUT, deleting=DELETE).
 
 ### Task 2.
-Implement your API Rest. Implement the API Rest with JAX-RS.
+Implement your API Rest with JAX-RS. You have to add these REST functions:
+
+- Create an user (not authenticated).
+- Request another users friendship (from authenticated user to another user).
+- Get friendships requests (friendships made to the authenticated user).
+- Accept friendship request (made to the authenticated user).
+- Get my wall posts (which are the authenticated user posts, as well as his friends
+posts). Results should include likes to each post.
+- Get my posts (the authenticated user posts).
+- Like a given post (the authenticated user does the like).
+- Post normal text, links and photos (you can make three different functions. 
+The author should be the authenticated user).
+- Delete a post (only posts authored by the authenticated user).
+- Modify a post (only posts authored by the authenticated user can be edited).
+
+Follow these rules:
 
 - Use the package `es.uvigo.esei.dgss.exercises.rest` in the **Web project**.
 - Use the EJBs (`UserEJB` and `PostEJB`) previously implemented.
