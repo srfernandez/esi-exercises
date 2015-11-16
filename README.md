@@ -907,7 +907,7 @@ Facelet based JSF views (xhtml files) will be located at the web project root fo
         <ul>
         <li> Campo1 : <h:ouputText value="#{myController.campo1}"/> </li>
         <li> Campo2: <h:ouputText value="#{myController.campo2}"/> </li>
-        <li> Fecha: <h:outputText value="#{myContorller.fecha}">
+        <li> Fecha: <h:outputText value="#{myController.fecha}">
                        <f:convertDateTime pattern="dd/MM/yyyy"/>
                     </h:outputText> </li>
         </ul>
@@ -922,7 +922,7 @@ Facelet based JSF views (xhtml files) will be located at the web project root fo
 
         <h:commandButton value="Enviar/Recargar" action="index.xhtml"/>
 
-        <p:calendar value="#{myController.fecha}>
+        <br> Fecha: <p:calendar value="#{myController.fecha}>
 
     </h:form>           
 </h:body>
@@ -956,6 +956,7 @@ Create a package `[es.uvigo.esei.dgss.exercises.jsf.controllers]` into your sour
    1. PREVIOUS: Add CDI support to your Java EE application
      
      Create an empty `[/src/main/webapp/WEB-INF/beans.xml]` file. Make sure `bean-discovery-mode` option is set to `"all"`.
+
      ```xml
      <?xml version="1.0" encoding="UTF-8"?>
      <beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
@@ -966,6 +967,7 @@ Create a package `[es.uvigo.esei.dgss.exercises.jsf.controllers]` into your sour
      </beans>
      ```
    2. Add a `PruebaController.java` file to `es.uvigo.esei.dgss.exercises` with the following class definition.
+
    ```java
    @Named(value="myController")
    @SessionScoped
