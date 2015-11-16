@@ -840,4 +840,157 @@ function and, if it does not return 401, you can assume that the user credential
 
 
 ## Exercise 5: JSF
-Coming soon...
+
+### Initial JSF example
+
+Dummy JSF page to see Facelets views (xhtml) and ManagedBeans integration.
+
+Can be done in a disposable branch of your web project or in an empty web project.
+
+#### (1) Setting environment+project
+
+##### (optional) Add Primefaces dependence to pom.xml of your web project
+
+
+```xml
+<dependency>
+  <groupId>org.primefaces</groupId>
+  <artifactId>primefaces</artifactId>
+  <version>5.3</version>
+</dependency>
+```
+NOTE: We will employ WildFly 8.2 default JSF implementation (Mojarra 2.2.8), so there is no need to include JSF dependences in out maven configuration
+
+
+##### (almost optional) Configurar FacesServlet en proyecto "web"
+NOTE: This configuration step is not mandatory since we are setting the default values for FacesServlet parameters
+(see [JSF 2.2 API Javadoc](https://javaserverfaces.java.net/nonav/docs/2.2/javadocs/index.html)).
+
+Add JSF configuration to `[/src/main/webapp/WEB-INF/web.xml]`
+```xml
+ <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+ </context-param>
+ <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+ </servlet-mapping>
+ <session-config>
+        <session-timeout> 30 </session-timeout>
+ </session-config>
+ <welcome-file-list>
+        <welcome-file>faces/index.xhtml</welcome-file>
+ </welcome-file-list>
+```
+Facelet based JSF views (xhtml files) will be located at the web project root folder, `[/src/main/webapp/]`
+
+#### (2) Create a test JSF view
+[Step 1] Create `[/src/main/webapp/index.xhtml]` file and add following tags.
+```html
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui" >
+<h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Ejemplo JSF+Facelet+Primefaces</title>
+</h:head>
+<h:body>
+    <h:form>
+        <ul>
+        <li> Campo1 : <h:ouputText value="#{myController.campo1}"/> </li>
+        <li> Campo2: <h:ouputText value="#{myController.campo2}"/> </li>
+        <li> Fecha: <h:outputText value="#{myContorller.fecha}">
+                       <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText> </li>
+        </ul>
+
+        <h:panelGrid columns="2">
+             <h:outputLabel value="Campo 1" />
+             <h:inputText value="#{myController.campo1}" />
+
+             <h:outputLabel value="Campo 2" />
+             <h:inputText value="#{myController.campo2}" />
+        </h:panelGrid>
+
+        <h:commandButton value="Enviar/Recargar" action="index.xhtml"/>
+
+        <p:calendar value="#{myController.fecha}>
+
+    </h:form>           
+</h:body>
+</html>
+```
+[Step 2] Create a "backing bean" (JSF ManagedBean) to hold data and methods employed in this view.
+
+Create a package `[es.uvigo.esei.dgss.exercises.jsf.controllers]` into your source code folder to hold JSF managed beans. 
+
+* __Alternative 1__: create a JSF native `@ManagedBean`
+   1. Add a `PruebaController.java` file to `es.uvigo.esei.dgss.exercises` with the following class definition.
+   ```java
+   @ManagedBean(name="myController")
+   @SessionScoped
+   public class PruebaController implements Serializable {
+         private String campo1;
+         private String campo2;
+         private Date fecha;
+         
+         @PostConstruct
+         public void inicializarFecha() {
+            this.fecha = Calendar.getInstance().getTime();
+         }
+         
+         // Getter and Setter for campo1, campo2, fecha
+   }
+   ```
+   IMPORTANT: Make sure that Java imports for `@SessionScoped` and `@ManagedBean` are from JSF packages (`import javax.faces.bean.ManagedBean` and `import javax.faces.bean.SessionScoped`)
+   
+* __Alternative 2__: create a CDI Bean with `@Named` annotation
+   1. PREVIOUS: Add CDI support to your Java EE application
+     
+     Create an empty `[/src/main/webapp/WEB-INF/beans.xml]` file. Make sure `bean-discovery-mode` option is set to `"all"`.
+     ```xml
+     <?xml version="1.0" encoding="UTF-8"?>
+     <beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee            
+                           http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+       bean-discovery-mode="all">
+     </beans>
+     ```
+   2. Add a `PruebaController.java` file to `es.uvigo.esei.dgss.exercises` with the following class definition.
+   ```java
+   @Named(value="myController")
+   @SessionScoped
+   public class PruebaController implements Serializable {
+        // same content than @ManagedBean backing bean
+   }
+   ```
+      IMPORTANT: Make sure that Java import for `@SessionScoped` is from `javax.enterprise.context.SessionScoped`
+
+After building and deploying you project, JSF aplication will be available at URI  `http://localhost:8080/[project_name]` (`web-0.0.1-SNAPSHOT` as project name in `esi-exercises` project).
+
+### Task 1
+Build a very simple JSF view to provide a basic `User` search interface.
+1. Query you service layer using the `String` provided by the user in the search Text Field.
+2. Retrieve and show the list of mathing `Users`.
+3. Once the user selects one of the mathing `Users`, show `User`profile information and the list of `Posts` writen by that `User`
+
+Steps:
+* Sketch you view(s) and identify which attributes much  be included in your Backing Bean.
+* Create your Backing Bean and inject (with `@EJB` or `@Inject`) the EJB components from your Service Layer to deal with `User` search and with `Post` retrieval.
+* Design you `xhtml` JSF view, using standard JSF components and simple interaction (no `<f:ajax>' interaction)
+
+### Task 2
+Try improve previous JSF view with some of these alternatives:
+* adding Primefaces components
+* including AJAX interacion to avoid reloading full views
+* using `<ui:repeat>` to get a personalized view (avoid `<h:dataTable>`)
+* using JSF Templates to unify views and simplify `xhtml` contents
