@@ -897,6 +897,7 @@ Facelet based JSF views (xhtml files) will be located at the web project root fo
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:p="http://primefaces.org/ui" >
 <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -922,7 +923,7 @@ Facelet based JSF views (xhtml files) will be located at the web project root fo
 
         <h:commandButton value="Enviar/Recargar" action="index.xhtml"/>
 
-        <br> Fecha: <p:calendar value="#{myController.fecha}>
+        <p> Fecha: <p:calendar value="#{myController.fecha}"/> </p>
 
     </h:form>           
 </h:body>
@@ -988,7 +989,7 @@ Build a very simple JSF view to provide a basic `User` search interface.
 Steps:
 * Sketch you view(s) and identify which attributes much  be included in your Backing Bean.
 * Create your Backing Bean and inject (with `@EJB` or `@Inject`) the EJB components from your Service Layer to deal with `User` search and with `Post` retrieval.
-* Design you `xhtml` JSF view, using standard JSF components and simple interaction (no `<f:ajax>' interaction)
+* Design you `xhtml` JSF view, using standard JSF components and simple interaction (no `<f:ajax>` interaction)
 
 ### Task 2
 Try improve previous JSF view with some of these alternatives:
