@@ -1,46 +1,51 @@
-package es.uvigo.esei.dgss.exercises.web;
+package es.uvigo.esei.dgss.exercises.service.sample;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.Dependent;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import es.uvigo.esei.dgss.exercises.domain.Comment;
-import es.uvigo.esei.dgss.exercises.domain.Friend;
 import es.uvigo.esei.dgss.exercises.domain.Photo;
 import es.uvigo.esei.dgss.exercises.domain.Post;
 import es.uvigo.esei.dgss.exercises.domain.User;
 
-@Dependent
-public class Facade {
-
-	private EntityManager em;
+@Stateless
+public class PostEJB {
 
 	@PersistenceContext
-	public void setEntityManager(EntityManager em) {
-		this.em = em;
+	private EntityManager em;
+
+	public Post findPostById(int id) {
+		return em.find(Post.class, id);
 	}
 
-	public User addUser(String login, String name, String password, byte[] picture) {
-		User user = new User(login);
+	public Post addPost(User user, String content) {
+		Post post = new Photo(user, content);
 
-		user.setName(name);
-		user.setPassword(password);
-		user.setPicture(picture);
-
-		em.persist(user);
-		return user;
+		em.persist(post);
+		return post;
 	}
 
-	public Friend addFriendship(User user1, User user2) {
-		Friend friendship = new Friend(user1, user2);
-		friendship.setDate(new Date());
+	public void updatePost(Post post) {
+		Post updated = findPostById(post.getId());
+		updated.setComments(post.getComments());
+		updated.setDate(post.getDate());
+		updated.setLikers(post.getLikers());
+		updated.setPoster(post.getPoster());
+	}
 
-		em.persist(friendship);
-		return friendship;
+	public void removePost(int id) {
+		em.remove(findPostById(id));
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Post> getPosts(User user) {
+		return (List<Post>) em.createQuery("SELECT p FROM Post p WHERE p.poster = :user").setParameter("user", user)
+				.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -53,12 +58,6 @@ public class Facade {
 
 		friends.addAll(befriendedBy);
 		return friends;
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<Post> getPosts(User user) {
-		return (List<Post>) em.createQuery("SELECT p FROM Post p WHERE p.poster = :user").setParameter("user", user)
-				.getResultList();
 	}
 
 	public List<Post> getFriendPosts(User user) {
@@ -114,33 +113,10 @@ public class Facade {
 		return photos;
 	}
 
-	public List<User> getPotentialFriends(User user) {
-		List<User> friends = new ArrayList<User>();
-		getFriends(user).forEach(u -> friends.addAll(getFriends(u)));
-
-		return friends;
-	}
-
-	public Post addPost(User user, String content) {
-		Photo post = new Photo(user, content);
-		em.persist(post);
-		return post;
-	}
-
 	public Comment addComment(User user, Post post, String content) {
 		Comment comment = new Comment(user, post);
 		comment.setContent(content);
 		em.persist(comment);
 		return comment;
-	}
-
-	public void addLike(User user, Post post) {
-		List<Post> likedPosts = user.getLikes();
-		likedPosts.add(post);
-		user.setLikes(likedPosts);
-
-		List<User> postLikers = post.getLikers();
-		postLikers.add(user);
-		post.setLikers(postLikers);
 	}
 }

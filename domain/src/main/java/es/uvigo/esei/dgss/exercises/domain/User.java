@@ -48,12 +48,8 @@ public class User {
 		return login;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public byte[] getPicture() {
-		return picture;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getName() {
@@ -64,28 +60,20 @@ public class User {
 		this.name = name;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	public byte[] getPicture() {
+		return picture;
+	}
+
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
-	}
-
-	public List<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
-
-	public List<Post> getLikes() {
-		return likes;
-	}
-
-	public void setLikes(List<Post> likes) {
-		this.likes = likes;
 	}
 
 	public List<Comment> getComments() {
@@ -94,6 +82,14 @@ public class User {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
 	public List<Friend> getFriends() {
@@ -110,6 +106,14 @@ public class User {
 
 	public void setBefriendedBy(List<Friend> befriendedBy) {
 		this.befriendedBy = befriendedBy;
+	}
+
+	public List<Post> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<Post> likes) {
+		this.likes = likes;
 	}
 
 	@Override
