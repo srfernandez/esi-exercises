@@ -17,6 +17,8 @@ public class Friend {
 	public Friend(User friend1, User friend2) {
 		this.friend1 = friend1;
 		this.friend2 = friend2;
+		this.date = new Date();
+		this.accepted = false;
 	}
 
 	@Id
@@ -31,7 +33,7 @@ public class Friend {
 
 	private Date date;
 
-	private boolean accept;
+	private boolean accepted;
 
 	public User getFriend1() {
 		return friend1;
@@ -49,11 +51,11 @@ public class Friend {
 		this.date = date;
 	}
 
-	public boolean isAccept() {
-		return accept;
+	public boolean isAccepted() {
+		return accepted;
 	}
 
-	public void setAccept(boolean accept) {
-		this.accept = accept;
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
 	}
 }

@@ -52,7 +52,7 @@ public class StatisticsEJB {
 	}
 
 	@Lock(LockType.WRITE)
-	public void decPosts() {
+	public void removePost() {
 		--totalPosts;
 	}
 

@@ -144,7 +144,7 @@ public class SimpleServlet extends HttpServlet {
 			userejb.addFriendship(user2, user4);
 			userejb.addFriendship(user3, user4);
 
-			Post post = postejb.addPost(user1, "test_post_photo");
+			Post post = postejb.addPhoto(new Photo(user1, "test_post_photo"));
 			userejb.addLike(user2, post);
 			postejb.addComment(user2, post, "test_post_comment_2");
 			userejb.addLike(user3, post);
@@ -200,6 +200,6 @@ public class SimpleServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// facadeTests(req, resp);
-		ejbTests(req, resp);
+		// ejbTests(req, resp);
 	}
 }
