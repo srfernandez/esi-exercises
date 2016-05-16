@@ -42,6 +42,11 @@ public class UserEJB {
 		return em.find(User.class, login);
 	}
 
+	public List<User> getMatchingUsers(String pattern) {
+		return this.em.createQuery("SELECT u FROM User u WHERE u.name LIKE :pattern", User.class)
+				.setParameter("pattern", "%" + pattern + "%").getResultList();
+	}
+
 	public User addUser(String login, String name, String password, byte[] picture) {
 		User user = new User(login);
 
